@@ -29,13 +29,13 @@ app.get("/", (req, res) => res.type('html').send('test'));
 
 app.post("/login", express.urlencoded(), (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, refresh_token } = req.body;
 
-    if (!(username && password)) {
+    if (!(username && password) && !refresh_token) {
       res.status(400).send("All input is required");
     }
 
-    if (username == "test" && password == "test") {
+    if ((username == "test" && password == "test") || refresh_token) {
       let result = {};
 
       const token = jwt.sign(
