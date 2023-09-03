@@ -46,6 +46,7 @@ app.post("/login", express.urlencoded(), (req, res) => {
       );
 
       result.access = token;
+      result.access_token = token;
 
       // user
       res.status(200).json(result);
