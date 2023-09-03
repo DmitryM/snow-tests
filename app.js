@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
+var randtoken = require("rand-token")
 
 const port = process.env.PORT || 3001;
 
@@ -8,7 +9,7 @@ const sign_key = "SECRET";
 
 const verifyToken = (req, res, next) => {
   const token =
-    req.query.token || req.headers["authorization"];
+    req.query.token || req.headers["authorization"].substr(7);
 
   if (!token) {
     return res.status(403).send("A token is required for authentication");
@@ -41,12 +42,13 @@ app.post("/login", express.urlencoded(), (req, res) => {
         { user_id: 123 },
         sign_key,
         {
-          expiresIn: "5m",
+          expiresIn: 300,
         }
       );
 
       result.access = token;
-      result.access_token = token;
+      result.refresh = randtoken.id(256);
+      // result.access_token = token;
 
       // user
       res.status(200).json(result);
@@ -57,6 +59,8 @@ app.post("/login", express.urlencoded(), (req, res) => {
     console.log(err);
   }
 });
+
+app.get("/test", verifyToken, (req, res) => res.type('html').send('Authorized!'));
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
