@@ -47,7 +47,7 @@ app.post("/login", express.urlencoded(), (req, res) => {
       );
 
       result.access = token;
-      result.refresh = randtoken.id(256);
+      result.refresh = randtoken.uid(256);
       // result.access_token = token;
 
       // user
